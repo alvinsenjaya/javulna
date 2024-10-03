@@ -135,46 +135,5 @@ pipeline {
                 }
             }
         }
-        stage('DAST Nuclei') {
-            agent {
-                docker {
-                    image 'projectdiscovery/nuclei'
-                    args '--user root --network host --entrypoint='
-                }
-            }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'nuclei -u http://192.168.0.110:8090 -nc -j > nuclei-report.json'
-                    sh 'cat nuclei-report.json'
-                }
-                archiveArtifacts artifacts: 'nuclei-report.json'
-            }
-        }
-        stage('DAST OWASP ZAP') {
-            agent {
-                docker {
-                    image 'ghcr.io/zaproxy/zaproxy:weekly'
-                    args '-u root --network host -v /var/run/docker.sock:/var/run/docker.sock --entrypoint= -v .:/zap/wrk/:rw'
-                }
-            }
-            steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'zap-api-scan.py -t doc/javulna.yaml -f openapi -r zapapiscan.html -x zapapiscan.xml'
-                }
-                sh 'cp /zap/wrk/zapbaseline.html ./zapapiscan.html'
-                sh 'cp /zap/wrk/zapbaseline.xml ./zapapiscan.xml'
-                archiveArtifacts artifacts: 'zapapiscan.html'
-                archiveArtifacts artifacts: 'zapapiscan.xml'
-            }
-        }
-    }
-    post {
-        always {
-            node('built-in') {
-                sh 'curl -X POST http://localhost:8080/api/v2/import-scan/ -H "Authorization: Token 4352361ac0640d6cb3284e5354f194fc89344c14" -F "scan_type=Trufflehog Scan" -F "file=@./trufflehog-scan-result.json;type=application/json" -F "engagement=15"'
-                sh 'curl -X POST http://localhost:8080/api/v2/import-scan/ -H "Authorization: Token 4352361ac0640d6cb3284e5354f194fc89344c14" -F "scan_type=Nuclei Scan" -F "file=@./nuclei-report.json;type=application/json" -F "engagement=15"'
-                sh 'curl -X POST http://localhost:8080/api/v2/import-scan/ -H "Authorization: Token 4352361ac0640d6cb3284e5354f194fc89344c14" -F "scan_type=ZAP Scan" -F "file=@./zapapiscan.xml.xml;type=text/xml" -F "engagement=15"'
-            }
-        }
     }
 }
