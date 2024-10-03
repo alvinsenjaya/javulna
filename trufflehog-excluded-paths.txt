@@ -1,0 +1,5 @@
+target
+.git
+snyk-scan-report.txt
+trufflehog-scan-result.txt
+.m2
