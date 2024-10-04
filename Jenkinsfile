@@ -102,7 +102,7 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'mvn sonar:sonar -Dsonar.token=$SONAR_CREDENTIALS_PSW -Dsonar.projectKey=javulna -Dsonar.qualitygate.wait=true -Dsonar.host.url=http://192.168.0.105:9000' 
+                    sh 'mvn sonar:sonar -Dsonar.token=$SONAR_CREDENTIALS_PSW -Dsonar.projectKey=Javulna -Dsonar.qualitygate.wait=true -Dsonar.host.url=http://192.168.0.105:9000' 
                 }
             }
         }
