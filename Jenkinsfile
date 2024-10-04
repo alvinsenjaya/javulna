@@ -6,6 +6,13 @@ pipeline {
         SONAR_CREDENTIALS = credentials('SonarToken')
     }
     stages {
+        stage('Cleanup Before Stages') {
+            steps {
+                script {
+                    sh 'rm -rf /var/jenkins_home/workspace/javulna/target'
+                }
+            }
+        }
         stage('Secret Scanning Using Trufflehog') {
             agent {
                 docker {
@@ -134,6 +141,11 @@ pipeline {
                     sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ubuntu@192.168.0.107 docker run -it --detach -p 8090:8090 --name javulna xenjutsu/javulna:0.1'
                 }
             }
+        }
+    }
+    post {
+        always {
+            sh 'rm -rf /var/jenkins_home/workspace/javulna/target'
         }
     }
 }
