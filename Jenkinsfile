@@ -102,7 +102,7 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'mvn sonar:sonar -Dsonar.token=$SONAR_CREDENTIALS_PSW -Dsonar.projectKey=javulna -Dsonar.qualitygate.wait=true -Dsonar.host.url=http://localhost:9000' 
+                    sh 'mvn sonar:sonar -Dsonar.token=$SONAR_CREDENTIALS_PSW -Dsonar.projectKey=javulna -Dsonar.qualitygate.wait=true -Dsonar.host.url=http://192.168.0.105:9000' 
                 }
             }
         }
@@ -128,10 +128,10 @@ pipeline {
             }
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "DeploymentSSHKey", keyFileVariable: 'keyfile')]) {
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no jenkins@192.168.0.110 "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no jenkins@192.168.0.110 docker pull xenjutsu/javulna:0.1'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no jenkins@192.168.0.110 docker rm --force javulna'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no jenkins@192.168.0.110 docker run -it --detach -p 8090:8090 --name javulna xenjutsu/javulna:0.1'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ubuntu@192.168.0.107 "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ubuntu@192.168.0.107 docker pull xenjutsu/javulna:0.1'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ubuntu@192.168.0.107 docker rm --force javulna'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ubuntu@192.168.0.107 docker run -it --detach -p 8090:8090 --name javulna xenjutsu/javulna:0.1'
                 }
             }
         }
