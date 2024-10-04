@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
         SNYK_CREDENTIALS = credentials('SnykToken')
-        SONAR_CREDENTIALS = credentials('SonarQubeToken')
+        SONAR_CREDENTIALS = credentials('SonarToken')
     }
     stages {
         stage('Secret Scanning Using Trufflehog') {
