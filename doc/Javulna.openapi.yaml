@@ -1,0 +1,616 @@
+openapi: 3.0.3
+info:
+  title: Javulna
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: '$TARGET_IP'
+paths:
+  /login:
+    post:
+      summary: Login
+      description: Login
+      operationId: login
+      parameters:
+        - name: origin
+          in: header
+          schema:
+            type: string
+            example: http://localhost:3000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: '???'
+                username:
+                  type: string
+                  example: '???'
+            examples:
+              Login:
+                value:
+                  password: '???'
+                  username: '???'
+      responses:
+        '200':
+          description: ''
+  /logout:
+    get:
+      summary: Logout
+      description: Logout
+      operationId: logout
+      parameters:
+        - name: origin
+          in: header
+          schema:
+            type: string
+            example: http://localhost:3000
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: NoSecretsATrueJediHas
+                username:
+                  type: string
+                  example: Yoda
+            examples:
+              Logout:
+                value:
+                  password: NoSecretsATrueJediHas
+                  username: Yoda
+      responses:
+        '200':
+          description: ''
+  /rest/movie:
+    get:
+      summary: List movies
+      description: List movies
+      operationId: listMovies
+      parameters:
+        - name: title
+          in: query
+          schema:
+            type: string
+            example: Empire
+        - name: description
+          in: query
+          schema:
+            type: string
+            example: Luke
+        - name: upgrade-insecure-requests
+          in: header
+          schema:
+            type: string
+            example: '1'
+        - name: user-agent
+          in: header
+          schema:
+            type: string
+            example: >-
+              Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like
+              Gecko) Chrome/60.0.3112.90 Safari/537.36
+        - name: accept-encoding
+          in: header
+          schema:
+            type: string
+            example: gzip, deflate, br
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+            example: hu,en;q=0.8,en-US;q=0.6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Mézga Aladár
+                sex:
+                  type: string
+                  example: m
+            examples:
+              List movies:
+                value:
+                  name: Mézga Aladár
+                  sex: m
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: Create Movie
+      description: Create Movie
+      operationId: createMovie
+      parameters:
+        - name: upgrade-insecure-requests
+          in: header
+          schema:
+            type: string
+            example: '1'
+        - name: user-agent
+          in: header
+          schema:
+            type: string
+            example: >-
+              Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like
+              Gecko) Chrome/60.0.3112.90 Safari/537.36
+        - name: accept-encoding
+          in: header
+          schema:
+            type: string
+            example: gzip, deflate, br
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+            example: hu,en;q=0.8,en-US;q=0.6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: m
+                genre:
+                  type: string
+                  example: sci-fi
+                title:
+                  type: string
+                  example: 'Star Wars: The empire strikes back'
+            examples:
+              Create Movie:
+                value:
+                  description: m
+                  genre: sci-fi
+                  title: 'Star Wars: The empire strikes back'
+          text/plain:
+            examples:
+              Create Movie with XML:
+                value: "<createMovie>\n\t<title>Star Wars: The empire strikes back</title>\n\t<description>m</description>\n\t<genre>sci-fi</genre>\n</createMovie>\n"
+      responses:
+        '200':
+          description: ''
+  /rest/moviexml:
+    post:
+      summary: Create Movie with XML param
+      description: Create Movie with XML param
+      operationId: createMovieWithXmlParam
+      parameters:
+        - name: upgrade-insecure-requests
+          in: header
+          schema:
+            type: string
+            example: '1'
+        - name: user-agent
+          in: header
+          schema:
+            type: string
+            example: >-
+              Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like
+              Gecko) Chrome/60.0.3112.90 Safari/537.36
+        - name: accept-encoding
+          in: header
+          schema:
+            type: string
+            example: gzip, deflate, br
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+            example: hu,en;q=0.8,en-US;q=0.6
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                inputxml:
+                  type: string
+                  example: "<createMovie>\n\t<title>Star Wars: The empire strikes back</title>\n\t<description>m</description>\n\t<genre>sci-fi</genre>\n</createMovie>"
+      responses:
+        '200':
+          description: ''
+  /rest/user/password:
+    post:
+      summary: Change password
+      description: Change password
+      operationId: changePassword
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+            example: Yoda
+        - name: oldPassword
+          in: query
+          schema:
+            type: string
+            example: NoSecretsATrueJediHas
+        - name: newPassword
+          in: query
+          schema:
+            type: string
+            example: DoIhaveASecretNow
+        - name: upgrade-insecure-requests
+          in: header
+          schema:
+            type: string
+            example: '1'
+        - name: user-agent
+          in: header
+          schema:
+            type: string
+            example: >-
+              Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like
+              Gecko) Chrome/60.0.3112.90 Safari/537.36
+        - name: accept-encoding
+          in: header
+          schema:
+            type: string
+            example: gzip, deflate, br
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+            example: hu,en;q=0.8,en-US;q=0.6
+      requestBody:
+        content:
+          text/plain:
+            examples:
+              Change password:
+                value: ''
+      responses:
+        '200':
+          description: ''
+  /rest/user:
+    get:
+      summary: List users
+      description: List users
+      operationId: listUsers
+      parameters:
+        - name: upgrade-insecure-requests
+          in: header
+          schema:
+            type: string
+            example: '1'
+        - name: user-agent
+          in: header
+          schema:
+            type: string
+            example: >-
+              Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like
+              Gecko) Chrome/60.0.3112.90 Safari/537.36
+        - name: accept-encoding
+          in: header
+          schema:
+            type: string
+            example: gzip, deflate, br
+        - name: accept-language
+          in: header
+          schema:
+            type: string
+            example: hu,en;q=0.8,en-US;q=0.6
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: Mézga Aladár
+                sex:
+                  type: string
+                  example: m
+            examples:
+              List users:
+                value:
+                  name: Mézga Aladár
+                  sex: m
+      responses:
+        '200':
+          description: ''
+    put:
+      summary: Create user
+      description: Create user
+      operationId: createUser
+      parameters:
+        - name: origin
+          in: header
+          schema:
+            type: string
+            example: http://localhost:3000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailAddress:
+                  type: string
+                  example: aladar@mezga.com
+                name:
+                  type: string
+                  example: aladar2
+                password:
+                  type: string
+                  example: aradadal
+                sex:
+                  type: string
+                  example: m
+                webPageUrl:
+                  type: string
+                  example: www.mezgaaladar.hu
+            examples:
+              Create user:
+                value:
+                  emailAddress: aladar@mezga.com
+                  name: aladar2
+                  password: aradadal
+                  sex: m
+                  webPageUrl: www.mezgaaladar.hu
+      responses:
+        '200':
+          description: ''
+    post:
+      summary: Modify user
+      description: Modify user
+      operationId: modifyUser
+      parameters:
+        - name: origin
+          in: header
+          schema:
+            type: string
+            example: http://localhost:3000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                emailAddress:
+                  type: string
+                  example: aladar@mezga.com
+                id:
+                  type: string
+                  example: 2534509b-3675-4c96-9f7f-28e912efd424
+                name:
+                  type: string
+                  example: Mézga Aladár
+                password:
+                  type: string
+                  example: aradadal
+                sex:
+                  type: string
+                  example: m
+            examples:
+              Modify user:
+                value:
+                  emailAddress: aladar@mezga.com
+                  id: 2534509b-3675-4c96-9f7f-28e912efd424
+                  name: Mézga Aladár
+                  password: aradadal
+                  sex: m
+      responses:
+        '200':
+          description: ''
+  /rest/messages/chat:
+    get:
+      summary: List Chat Messages
+      description: List Chat Messages
+      operationId: listChatMessages
+      parameters:
+        - name: otherUser
+          in: query
+          schema:
+            type: string
+            example: Darth Veder
+        - name: origin
+          in: header
+          schema:
+            type: string
+            example: http://localhost:3000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: hello
+                toUser:
+                  type: string
+                  example: Darth Veder
+            examples:
+              List Chat Messages:
+                value:
+                  text: hello
+                  toUser: Darth Veder
+      responses:
+        '200':
+          description: ''
+    put:
+      summary: SendChat
+      description: SendChat
+      operationId: sendchat
+      parameters:
+        - name: origin
+          in: header
+          schema:
+            type: string
+            example: http://localhost:3000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: mizu
+                toUser:
+                  type: string
+                  example: Darth Veder
+            examples:
+              SendChat:
+                value:
+                  text: mizu
+                  toUser: Darth Veder
+      responses:
+        '200':
+          description: ''
+  /rest/messages/chatAll:
+    get:
+      summary: List all Chat Messages
+      description: List all Chat Messages
+      operationId: listAllChatMessages
+      parameters:
+        - name: origin
+          in: header
+          schema:
+            type: string
+            example: http://localhost:3000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: hello
+                toUser:
+                  type: string
+                  example: Darth Veder
+            examples:
+              List all Chat Messages:
+                value:
+                  text: hello
+                  toUser: Darth Veder
+      responses:
+        '200':
+          description: ''
+  /rest/movieobject:
+    get:
+      summary: List buyable movieobjects
+      description: List buyable movieobjects
+      operationId: listBuyableMovieobjects
+      requestBody:
+        content:
+          application/octet-stream: {}
+      responses:
+        '200':
+          description: ''
+  /rest/order:
+    put:
+      summary: Buy movie objects
+      description: Buy movie objects
+      operationId: buyMovieObjects
+      parameters:
+        - name: origin
+          in: header
+          schema:
+            type: string
+            example: http://localhost:3000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderItems:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      movieObjectId:
+                        type: string
+                        example: '1'
+                      nrOfItemsOrdered:
+                        type: number
+                        example: 1
+                  example:
+                    - movieObjectId: '1'
+                      nrOfItemsOrdered: 1
+                    - movieObjectId: '2'
+                      nrOfItemsOrdered: 2
+            examples:
+              Buy movie objects:
+                value:
+                  orderItems:
+                    - movieObjectId: '1'
+                      nrOfItemsOrdered: 1
+                    - movieObjectId: '2'
+                      nrOfItemsOrdered: 2
+      responses:
+        '200':
+          description: ''
+  /uploadFile:
+    post:
+      summary: Upload file
+      description: Upload file
+      operationId: uploadFile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: ''
+  /downloadFile:
+    get:
+      summary: Download file
+      description: Download file
+      operationId: downloadFile
+      parameters:
+        - name: fileName
+          in: query
+          schema:
+            type: string
+            example: 01.jpg
+      requestBody:
+        content:
+          application/octet-stream: {}
+      responses:
+        '200':
+          description: ''
+  /rest/ldap:
+    get:
+      summary: Find user in LDAP
+      description: Find user in LDAP
+      operationId: findUserInLdap
+      parameters:
+        - name: username
+          in: query
+          schema:
+            type: string
+            example: aladar
+        - name: password
+          in: query
+          schema:
+            type: string
+            example: aradadal
+      requestBody:
+        content:
+          application/octet-stream: {}
+      responses:
+        '200':
+          description: ''
+tags: []
