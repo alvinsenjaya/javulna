@@ -9,6 +9,7 @@ pipeline {
         SONARQUBE_IP = '192.168.1.19' // Variable for SonarQube IP
     }
     stages {
+        /*
         stage('Secret Scanning Using Trufflehog') {
             agent {
                 docker {
@@ -106,6 +107,7 @@ pipeline {
                 sh 'docker push xenjutsu/javulna:0.1'
             }
         }
+        */
         stage('Deploy Docker Image') {
             agent {
                 docker {
@@ -120,6 +122,38 @@ pipeline {
                     sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_IP} docker rm --force javulna'
                     sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_IP} docker run -it --detach -p 8090:8090 --name javulna xenjutsu/javulna:0.1'
                 }
+            }
+        }
+        stage('DAST Nuclei') {
+            agent {
+                docker {
+                    image 'projectdiscovery/nuclei'
+                    args '--user root --network host --entrypoint='
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'nuclei -u http://$TARGET_IP:8090 -nc -j > nuclei-report.json'
+                    sh 'cat nuclei-report.json'
+                }
+                archiveArtifacts artifacts: 'nuclei-report.json'
+            }
+        }
+        stage('DAST OWASP ZAP') {
+            agent {
+                docker {
+                    image 'ghcr.io/zaproxy/zaproxy:weekly'
+                    args '-u root --network host -v /var/run/docker.sock:/var/run/docker.sock --entrypoint= -v .:/zap/wrk/:rw'
+                }
+            }
+            steps {
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'zap-api-scan.py -t doc/Javulna.openapi.yaml -f openapi -r zapapiscan.html -x zapapiscan.xml'
+                }
+                sh 'cp /zap/wrk/zapbaseline.html ./zapapiscan.html'
+                sh 'cp /zap/wrk/zapbaseline.xml ./zapapiscan.xml'
+                archiveArtifacts artifacts: 'zapapiscan.html'
+                archiveArtifacts artifacts: 'zapapiscan.xml'
             }
         }
     }
