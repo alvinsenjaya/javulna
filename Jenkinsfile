@@ -150,7 +150,7 @@ pipeline {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     sh 'pwd'
                     sh 'ls -la'
-                    sh 'ls -la doc
+                    sh 'ls -la doc'
                     sh 'ls -la /zap/wrk'
                     sh 'zap-api-scan.py -t /zap/wrk/doc/Javulna.openapi.yaml -f openapi -r zapapiscan.html -x zapapiscan.xml'
                 }
