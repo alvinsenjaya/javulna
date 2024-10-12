@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   contact: {}
 servers:
-  - url: 'http://192.168.1.19'
+  - url: 'http://192.168.1.19:8090'
 paths:
   /login:
     post:
