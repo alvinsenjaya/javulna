@@ -142,7 +142,7 @@ pipeline {
         stage('DAST OWASP ZAP') {
             agent {
                 docker {
-                    image 'ghcr.io/zaproxy/zaproxy:weekly'
+                    image 'ghcr.io/zaproxy/zaproxy:stable'
                     args '-u root --network host -v /var/run/docker.sock:/var/run/docker.sock --entrypoint= -v .:/zap/wrk/:rw'
                 }
             }
