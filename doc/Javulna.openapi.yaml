@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   contact: {}
 servers:
-  - url: '$TARGET_IP'
+  - url: 'http://192.168.1.19'
 paths:
   /login:
     post:
