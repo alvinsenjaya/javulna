@@ -148,7 +148,7 @@ pipeline {
             }
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    sh 'zap-api-scan.py -t doc/Javulna.openapi.yaml -f openapi -r zapapiscan.html -x zapapiscan.xml'
+                    sh 'zap-api-scan.py -t /var/jenkins_home/workspace/javulna@2/doc/Javulna.openapi.yaml -f openapi -r zapapiscan.html -x zapapiscan.xml'
                 }
                 sh 'cp /zap/wrk/zapbaseline.html ./zapapiscan.html'
                 sh 'cp /zap/wrk/zapbaseline.xml ./zapapiscan.xml'
