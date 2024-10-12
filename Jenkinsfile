@@ -5,7 +5,7 @@ pipeline {
         SNYK_CREDENTIALS = credentials('SnykToken')
         SONAR_CREDENTIALS = credentials('SonarToken')
         DEPLOY_USER = 'jtf01645' // Variable for SSH username
-        DEPLOY_IP = '192.168.1.19' // Variable for target IP
+        TARGET_IP = '192.168.1.19' // Variable for target IP
         SONARQUBE_IP = '192.168.1.19' // Variable for SonarQube IP
     }
     stages {
@@ -117,10 +117,10 @@ pipeline {
             }
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: "DeploymentSSHKey", keyFileVariable: 'keyfile')]) {
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_IP} "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_IP} docker pull xenjutsu/javulna:0.1'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_IP} docker rm --force javulna'
-                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${DEPLOY_IP} docker run -it --detach -p 8090:8090 --name javulna xenjutsu/javulna:0.1'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${TARGET_IP} "echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin"'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${TARGET_IP} docker pull xenjutsu/javulna:0.1'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${TARGET_IP} docker rm --force javulna'
+                    sh 'ssh -i ${keyfile} -o StrictHostKeyChecking=no ${DEPLOY_USER}@${TARGET_IP} docker run -it --detach -p 8090:8090 --name javulna xenjutsu/javulna:0.1'
                 }
             }
         }
