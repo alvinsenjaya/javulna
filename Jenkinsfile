@@ -4,12 +4,11 @@ pipeline {
         DOCKERHUB_CREDENTIALS = credentials('DockerLogin')
         SNYK_CREDENTIALS = credentials('SnykToken')
         SONAR_CREDENTIALS = credentials('SonarToken')
-        DEPLOY_USER = 'jtf01645' // Variable for SSH username
-        TARGET_IP = '192.168.1.24' // Variable for target IP
-        SONARQUBE_IP = '192.168.1.19' // Variable for SonarQube IP
+        DEPLOY_USERNAME = 'ubuntu' // Add deployment username
+        TARGET_IP = '192.168.0.17' // Add target IP for deployment
+        SONARQUBE_IP = '192.168.0.18' // Add SonarQube IP
     }
     stages {
-        /*
         stage('Secret Scanning Using Trufflehog') {
             agent {
                 docker {
@@ -107,7 +106,6 @@ pipeline {
                 sh 'docker push xenjutsu/javulna:0.1'
             }
         }
-        */
         stage('Deploy Docker Image') {
             agent {
                 docker {
